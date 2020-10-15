@@ -20,6 +20,7 @@ import (
 	"github.com/go-kit/kit/log"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/prometheus/client_golang/prometheus"
+	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 // Scraper is minimal interface that let's you add new prometheus metrics to mysqld_exporter.
@@ -36,4 +37,12 @@ type Scraper interface {
 
 	// Scrape collects data from database connection and sends it over channel as prometheus metric.
 	Scrape(ctx context.Context, db *sql.DB, ch chan<- prometheus.Metric, logger log.Logger) error
+}
+
+// ConfigurableScraper extends the Scraper interface by allowing it to be configured with flags.
+type ConfigurableScraper interface {
+	Scraper
+
+	// Register flags to configure a scraper against a given kingpin Application.
+	RegisterFlags(application *kingpin.Application)
 }

@@ -24,6 +24,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/model"
 	"github.com/smartystreets/goconvey/convey"
+	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 const dsn = "root@/mysql"
@@ -31,6 +32,14 @@ const dsn = "root@/mysql"
 func TestExporter(t *testing.T) {
 	if testing.Short() {
 		t.Skip("-short is passed, skipping test")
+	}
+
+	var exporterConfig Config
+	kingpinApp := kingpin.New("TestExporter", "")
+	exporterConfig.RegisterFlags(kingpinApp)
+	_, err := kingpinApp.Parse([]string{})
+	if err != nil {
+		t.Fatal(err)
 	}
 
 	exporter := New(
@@ -41,6 +50,7 @@ func TestExporter(t *testing.T) {
 			ScrapeGlobalStatus{},
 		},
 		log.NewNopLogger(),
+		exporterConfig,
 	)
 
 	convey.Convey("Metrics describing", t, func() {
