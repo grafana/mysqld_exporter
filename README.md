@@ -1,6 +1,6 @@
 # MySQL Server Exporter [![Build Status](https://travis-ci.org/prometheus/mysqld_exporter.svg)][travis]
 
-[![CircleCI](https://circleci.com/gh/prometheus/mysqld_exporter/tree/main.svg?style=shield)][circleci]
+[![Build Status](https://github.com/prometheus/mysqld_exporter/actions/workflows/ci.yml/badge.svg)](https://github.com/prometheus/mysqld_exporter/actions/workflows/ci.yml)
 [![Docker Repository on Quay](https://quay.io/repository/prometheus/mysqld-exporter/status)][quay]
 [![Docker Pulls](https://img.shields.io/docker/pulls/prom/mysqld-exporter.svg?maxAge=604800)][hub]
 [![Go Report Card](https://goreportcard.com/badge/github.com/prometheus/mysqld_exporter)](https://goreportcard.com/report/github.com/prometheus/mysqld_exporter)
@@ -109,6 +109,7 @@ collect.info_schema.processlist                              | 5.1           | C
 collect.info_schema.processlist.min_time                     | 5.1           | Minimum time a thread must be in each state to be counted. (default: 0)
 collect.info_schema.query_response_time                      | 5.5           | Collect query response time distribution if query_response_time_stats is ON.
 collect.info_schema.replica_host                             | 5.6           | Collect metrics from information_schema.replica_host_status.
+collect.info_schema.rocksdb_perf_context                     | 5.6           | Collect RocksDB metrics from information_schema.ROCKSDB_PERF_CONTEXT.
 collect.info_schema.tables                                   | 5.1           | Collect metrics from information_schema.tables.
 collect.info_schema.tables.databases                         | 5.1           | The list of databases to collect table stats for, or '`*`' for all.
 collect.info_schema.tablestats                               | 5.1           | If running with userstat=1, set to true to collect table statistics.
@@ -145,6 +146,7 @@ mysqld.username                            | Username to be used for connecting 
 config.my-cnf                              | Path to .my.cnf file to read MySQL credentials from. (default: `~/.my.cnf`)
 log.level                                  | Logging verbosity (default: info)
 exporter.lock_wait_timeout                 | Set a lock_wait_timeout (in seconds) on the connection to avoid long metadata locking. (default: 2)
+exporter.enable_lock_wait_timeout          | Enable the lock_wait_timeout connection parameter. Makes the exporter compatible with older versions of MySQL. (default: true)
 exporter.log_slow_filter                   | Add a log_slow_filter to avoid slow query logging of scrapes.  NOTE: Not supported by Oracle MySQL.
 tls.insecure-skip-verify                   | Ignore tls verification errors.
 web.config.file                            | Path to a [web configuration file](#tls-and-basic-authentication)
@@ -182,6 +184,13 @@ To specify the client SSL keypair, add the following to the cnf.
 ```
 ssl-key=/path/to/ssl/client/key
 ssl-cert=/path/to/ssl/client/cert
+```
+
+It's possible to also restrict the TLS versions that can be used between the MySQL server and mysqld exporter by specifying versions in the mysql cnf file like this:
+
+```
+tls-min-version=TLSv1.2
+tls-max-version=TLSv1.3
 ```
 
 
@@ -230,7 +239,6 @@ This can be useful for having different Prometheus servers collect specific metr
 
 There is a set of sample rules, alerts and dashboards available in the [mysqld-mixin](mysqld-mixin/)
 
-[circleci]: https://circleci.com/gh/prometheus/mysqld_exporter
 [hub]: https://hub.docker.com/r/prom/mysqld-exporter/
 [travis]: https://travis-ci.org/prometheus/mysqld_exporter
 [quay]: https://quay.io/repository/prometheus/mysqld-exporter
