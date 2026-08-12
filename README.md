@@ -7,6 +7,8 @@
 
 Prometheus exporter for MySQL server metrics.
 
+> This is a Grafana Labs-maintained fork of [prometheus/mysqld_exporter](https://github.com/prometheus/mysqld_exporter), kept in sync with upstream. See [MAINTAINERS.md](MAINTAINERS.md).
+
 Supported versions:
 * MySQL >= 5.6.
 * MariaDB >= 10.3

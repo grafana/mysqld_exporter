@@ -1,1 +1,1 @@
-* Ben Kochie <superq@gmail.com>
+* Grafana Operator Experience Squad (@grafana/grafana-operator-experience-squad)

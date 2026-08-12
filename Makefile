@@ -13,14 +13,14 @@
 
 # Needs to be defined before including Makefile.common to auto-generate targets
 DOCKER_ARCHS ?= amd64 armv7 arm64
+DOCKER_IMAGE_NAME ?= grafana-mysqld-exporter
+DOCKER_REPO       ?= grafana
 
 all: vet
 
 include Makefile.common
 
 STATICCHECK_IGNORE =
-
-DOCKER_IMAGE_NAME ?= mysqld-exporter
 
 .PHONY: test-docker-single-exporter
 test-docker-single-exporter:
